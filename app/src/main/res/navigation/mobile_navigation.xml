@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/addProjectScreenFragment"
-        android:name="com.example.vlsm.AddProjectScreenFragment"
+        android:name="com.example.vlsm.ui.addproject.AddProjectScreenFragment"
         android:label="fragment_add_project_screen"
         tools:layout="@layout/fragment_add_project_screen" />
 

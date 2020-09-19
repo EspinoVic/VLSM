@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1a73e8</color>
+    <color name="colorPrimaryDark">#1a73e8</color>6200EE
+    <color name="colorAccent">#20A8C1</color>
+
+
+    <color name="colorAccentActive">#1658AF</color><!--Click-->
+    <color name="colorAccentEnabled">#1a73e8</color>
+    <color name="colorAccentDisabled">#3B4E67</color>
+
+    <color name="X">#FFAAAA</color>
+    <color name="Z">#8BC34A</color>
+    <color name="lyrics_primary">#3A3A3A</color>
+    <color name="lyric_secondary">#585858</color>
+</resources>

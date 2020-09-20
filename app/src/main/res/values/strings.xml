@@ -31,5 +31,6 @@
     <string name="description_group_nodes">Description Group Nodes</string>
     <string name="start_ip">Start IP: a.b.c.d</string>
     <string name="end_ip">End IP: a.b.c.d</string>
+    <string name="delete_selection">Delete selection</string>
 
 </resources>

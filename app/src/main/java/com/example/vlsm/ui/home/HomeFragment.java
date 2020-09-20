@@ -127,6 +127,8 @@ public class HomeFragment extends Fragment implements ProjectListAdapter.Project
             switch (item.getItemId()) {
                 case R.id.menu_remove:
                     // TODO: actually remove items
+                    projectListAdapter.removeItems(projectListAdapter.getSelectedItems());
+                    mode.finish();
                     Log.d(TAG, "menu_remove");
                     mode.finish();
                     return true;

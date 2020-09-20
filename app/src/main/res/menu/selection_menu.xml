@@ -7,9 +7,10 @@
 		android:icon="@drawable/ic_delete_white_24dp"
 		android:orderInCategory="2"
 		app:showAsAction="ifRoom"
-		android:title="Borrar selección"
+		android:title="@string/delete_selection"
 		/>
 
+<!--
 	<item
 		android:id="@+id/menu_realizada"
 		android:icon="@drawable/ic_check_black_24dp"
@@ -17,6 +18,7 @@
 		app:showAsAction="ifRoom"
 		android:title="Marcar como hecha"
 		/>
+-->
 
 
 </menu>

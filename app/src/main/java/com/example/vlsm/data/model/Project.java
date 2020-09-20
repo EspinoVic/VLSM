@@ -74,4 +74,12 @@ public class Project {
     public void setListNodos(ArrayList<SubRed> listNodos) {
         this.listNodos = listNodos;
     }
+
+    public String getDateTimeCreation() {
+        return dateTimeCreation;
+    }
+
+    public void setDateTimeCreation(String dateTimeCreation) {
+        this.dateTimeCreation = dateTimeCreation;
+    }
 }

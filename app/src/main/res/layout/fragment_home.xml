@@ -7,12 +7,12 @@
     tools:context=".ui.home.HomeFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_projec_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/project_item_lista"
+
         />
-
-
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_addProject"

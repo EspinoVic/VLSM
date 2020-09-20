@@ -5,14 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/project_item_list"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-
-    android:padding="4dp"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardUseCompatPadding="true"
+    android:clickable="true"
+    android:focusable="true"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="12dp"
         >
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_startName"
@@ -41,7 +44,7 @@
             android:maxLines="1"
             android:text="@string/name_project"
             android:textColor="@color/lyrics_primary"
-            android:textSize="17sp"
+            android:textSize="26sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="@id/gl_startName"
             app:layout_constraintRight_toRightOf="parent"
@@ -58,7 +61,7 @@
             android:minLines="1"
             android:maxLines="1"
             android:textColor="@color/lyric_secondary"
-            android:textSize="16sp"
+            android:textSize="24sp"
             app:layout_constraintVertical_bias="0"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="@id/gl_startName"

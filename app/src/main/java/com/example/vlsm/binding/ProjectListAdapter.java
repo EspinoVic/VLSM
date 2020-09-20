@@ -61,7 +61,12 @@ public class ProjectListAdapter extends SelectableAdapter<ProjectListAdapter.Pro
     public int getItemCount() {
         return items.size();
     }
+    public void addItem(Project item){
+        items.add( 0,item);
+        //notifyItemInserted(items.size()-1);
+        notifyItemInserted(0);
 
+    }
  /*   @Override
     public int getItemViewType(int position) {
         return super.getItemViewType(position);

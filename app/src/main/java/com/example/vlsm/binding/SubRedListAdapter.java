@@ -61,6 +61,12 @@ public class SubRedListAdapter extends SelectableAdapter<SubRedListAdapter.SubRe
         return items.size();
     }
 
+    public void addItem(SubRed item){
+        items.add( 0,item);
+        //notifyItemInserted(items.size()-1);
+        notifyItemInserted(0);
+
+    }
  /*   @Override
     public int getItemViewType(int position) {
         return super.getItemViewType(position);

@@ -2,6 +2,8 @@ package com.example.vlsm.ui.addproject;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -9,13 +11,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.vlsm.R;
 import com.example.vlsm.alb.Adapter;
+import com.example.vlsm.binding.ProjectListAdapter;
 import com.example.vlsm.binding.SubRedListAdapter;
+import com.example.vlsm.ui.home.HomeFragment;
 
 import static android.widget.LinearLayout.HORIZONTAL;
 
@@ -24,7 +31,7 @@ import static android.widget.LinearLayout.HORIZONTAL;
  * Use the {@link AddProjectScreenFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddProjectScreenFragment extends Fragment {
+public class AddProjectScreenFragment extends Fragment implements SubRedListAdapter.SubRedViewHolder.ClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,6 +41,10 @@ public class AddProjectScreenFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private SubRedListAdapter adapterSubRedesProject;
+    private ActionModeCallback actionModeCallback = new AddProjectScreenFragment.ActionModeCallback();
+    private ActionMode actionMode;
 
     public AddProjectScreenFragment() {
         // Required empty public constructor
@@ -75,11 +86,84 @@ public class AddProjectScreenFragment extends Fragment {
 
         RecyclerView recyclerView =  root.findViewById(R.id.recycler_subredlist_fromProject);
         /*recyclerView.setAdapter(new Adapter(null));*/
-        recyclerView.setAdapter(new SubRedListAdapter());
+        this.adapterSubRedesProject = new SubRedListAdapter(this);
+        recyclerView.setAdapter(adapterSubRedesProject);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
  /*       DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), HORIZONTAL);
         recyclerView.addItemDecoration(itemDecor);*/
         return  root;
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+        if (actionMode != null) {
+            toggleSelection(position);
+        }
+    }
+
+    @Override
+    public boolean onItemLongClicked(int position) {
+        if (actionMode == null) {
+            /*actionMode = startSupportActionMode(actionModeCallback);*/
+            actionMode = ((AppCompatActivity)getActivity()).startSupportActionMode(this.actionModeCallback);
+
+        }
+
+        toggleSelection(position);
+
+        return true;
+    }
+
+
+    private void toggleSelection(int position) {
+        adapterSubRedesProject.toggleSelection(position);
+        int count = adapterSubRedesProject.getSelectedItemCount();
+
+        if (count == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle(String.valueOf(count) + " Project (s) ");
+            actionMode.invalidate();
+        }
+    }
+
+
+    private class ActionModeCallback implements ActionMode.Callback {
+        @SuppressWarnings("unused")
+        private final String TAG = AddProjectScreenFragment.ActionModeCallback.class.getSimpleName();
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate (R.menu.selection_menu, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_remove:
+                    // TODO: actually remove items
+                    adapterSubRedesProject.removeItems(adapterSubRedesProject.getSelectedItems());
+                    mode.finish();
+                    Log.d(TAG, "menu_remove");
+                    mode.finish();
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            adapterSubRedesProject.clearSelection();
+            actionMode = null;
+        }
     }
 }

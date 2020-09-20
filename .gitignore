@@ -12,3 +12,8 @@
 /captures
 .externalNativeBuild
 .cxx
+/app/src/main/java/com/example/vlsm/alb/Adapter.java
+/app/src/main/java/com/example/vlsm/alb/Item.java
+/app/src/main/java/com/example/vlsm/alb/SelectableAdapter.java
+/app/src/main/res/layout/item.xml
+/app/src/main/res/layout/item_active.xml

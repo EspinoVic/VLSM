@@ -3,12 +3,21 @@ package com.example.vlsm.ui.addproject;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.vlsm.R;
+import com.example.vlsm.alb.Adapter;
+import com.example.vlsm.binding.SubRedListAdapter;
+
+import static android.widget.LinearLayout.HORIZONTAL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,12 +64,22 @@ public class AddProjectScreenFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_project_screen, container, false);
+        View root =  inflater.inflate(R.layout.fragment_add_project_screen, container, false);
+
+        RecyclerView recyclerView =  root.findViewById(R.id.recycler_subredlist_fromProject);
+        /*recyclerView.setAdapter(new Adapter(null));*/
+        recyclerView.setAdapter(new SubRedListAdapter());
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+ /*       DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), HORIZONTAL);
+        recyclerView.addItemDecoration(itemDecor);*/
+        return  root;
     }
 }

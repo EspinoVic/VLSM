@@ -13,4 +13,5 @@
     <color name="Z">#8BC34A</color>
     <color name="lyrics_primary">#3A3A3A</color>
     <color name="lyric_secondary">#585858</color>
+    <color name="selected_overlay">#B61205</color>
 </resources>

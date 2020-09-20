@@ -112,6 +112,7 @@
         app:layout_constraintTop_toBottomOf="@id/container_project_info"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/project_subred_item"
+        tools:itemCount="1"
 
         />
 

@@ -1,5 +1,6 @@
 package com.example.vlsm.binding;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,7 @@ import com.example.vlsm.data.model.SubRed;
 
 import java.util.ArrayList;
 
-public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.ProjectViewHolder>{
+public class ProjectListAdapter extends SelectableAdapter<ProjectListAdapter.ProjectViewHolder> {
 
     @SuppressWarnings("unused")
     private static final String TAG = ProjectListAdapter.class.getSimpleName();
@@ -22,8 +23,11 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     private static final int ITEM_COUNT = 25;
     private ArrayList<Project> items;
 
-    public ProjectListAdapter() {
+    ProjectViewHolder.ClickListener clickListener;
+
+    public ProjectListAdapter(ProjectViewHolder.ClickListener clickListener) {
         super();
+        this.clickListener = clickListener;
 
         // Create some items
         items = new ArrayList<>();
@@ -36,7 +40,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     @Override
     public ProjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_item_lista, parent, false);
-        return new ProjectViewHolder(v);
+        return new ProjectViewHolder(v,clickListener);
     }
 
     @Override
@@ -45,6 +49,8 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
 
         holder.txt_project_name.setText(projectItem.getProjectName() + " nodes");
         holder.txt_date_project_creation.setText(projectItem.getDateTimeCreation());
+
+        holder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
 
     }
 
@@ -58,20 +64,47 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
         return super.getItemViewType(position);
     }*/
 
-    public static class ProjectViewHolder extends RecyclerView.ViewHolder {
+    public static class ProjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
         TextView txt_project_name;
         TextView txt_date_project_creation;
+        View selectedOverlay;
+        private ClickListener listener;
 
-
-        public ProjectViewHolder(View itemView) {
+        public ProjectViewHolder(View itemView, ClickListener listener) {
             super(itemView);
 
             txt_project_name =   itemView.findViewById(R.id.txt_NameProject);
             txt_date_project_creation =  itemView.findViewById(R.id.txt_DateProject);
+            selectedOverlay = itemView.findViewById(R.id.selected_overlay);
+
+            this.listener = listener;
 
 
-
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            if (listener != null) {
+                listener.onItemClicked(getPosition());
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (listener != null) {
+                return listener.onItemLongClicked(getPosition());
+            }
+
+            return false;
+        }
+
+        public interface ClickListener {
+            public void onItemClicked(int position);
+            public boolean onItemLongClicked(int position);
+        }
+
     }
 
 }

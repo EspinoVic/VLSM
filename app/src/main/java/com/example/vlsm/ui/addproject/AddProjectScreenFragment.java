@@ -1,8 +1,10 @@
 package com.example.vlsm.ui.addproject;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
@@ -50,6 +52,7 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
     private ActionModeCallback actionModeCallback = new AddProjectScreenFragment.ActionModeCallback();
     private ActionMode actionMode;
 
+    private Project currentProject;
 
 
     public AddProjectScreenFragment() {
@@ -76,6 +79,9 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
     private EditText descriptionGroup ;
     private Button btn_addSubRed ;
     private RecyclerView recyclerView;
+
+   private Button btn_cancel;
+   private Button btn_save;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,7 +89,7 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
         View root =  inflater.inflate(R.layout.fragment_add_project_screen, container, false);
 
         /*addProjectViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);*/
-        addProjectViewModel = new ViewModelProvider(this).get(AddProjectViewModel.class);
+        addProjectViewModel = new ViewModelProvider(requireActivity()).get(AddProjectViewModel.class);
 
          this.txt_NameProject = root.findViewById(R.id.txt_NameProject);
          this.txt_startIP = root.findViewById(R.id.txt_startIP);
@@ -91,6 +97,9 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
          this.txt_numGroupNodes = root.findViewById(R.id.txt_numGroupNodes);
          this.descriptionGroup = root.findViewById(R.id.descriptionGroup);
          this.btn_addSubRed = root.findViewById(R.id.btn_addSubRed);
+
+        this.btn_cancel = root.findViewById(R.id.btn_cancel);
+        this.btn_save = root.findViewById(R.id.btn_save);
 
         recyclerView =  root.findViewById(R.id.recycler_subredlist_fromProject);
         /*recyclerView.setAdapter(new Adapter(null));*/
@@ -108,6 +117,7 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
             @Override
             public void onChanged(Project project) {
                 if(project!=null){
+                    currentProject =project;
                     txt_NameProject.setText(project.getProjectName());
                     txt_startIP.setText(project.getIpProject().toString());
                     startMask.setText(project.getMask()+"");
@@ -118,30 +128,22 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
             }
         });
 
-       /*AA addProjectViewModel.getProjectNodes().observe(getViewLifecycleOwner(), new Observer<ArrayList<SubRed>>() {
-            @Override
-            public void onChanged(ArrayList<SubRed> subReds) {
-                if(subReds!=null){
-                    adapterSubRedesProject.setItems(subReds);
-                }else{
-                    adapterSubRedesProject.setItems(new ArrayList<SubRed>());*//*empty*//*
 
-                }
-            }
-        });*/
-
-        /**/
-/*        addProjectViewModel.getCurrentNodeToAdd().observe(getViewLifecycleOwner(), new Observer<SubRed>() {
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(SubRed subRed) {
-                *//*It'll be null only the first time, when the viewModel is created*//*
-                if(subRed == null){
-                    return;
-                }else{
-                    adapterSubRedesProject.addItem(subRed);
-                }
+            public void onClick(View view) {
+                /*getParentFragmentManager().popBackStack();*/
+                getActivity().onBackPressed();
+                /*getFragmentManager().popBackStack();*/
             }
-        });*/
+        });
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addProjectViewModel.getProject().setValue(currentProject);
+                getActivity().onBackPressed();
+            }
+        });
 
         btn_addSubRed.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,18 +152,25 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
                 if(validateNewNode()){
 
                     try {
-                        Project project = addProjectViewModel.getProject().getValue();
-                        if(project == null){
-                            addProjectViewModel.setProject(
+                        /*Project project = addProjectViewModel.getProject().getValue();*/
+                        if(currentProject == null){
+                            /*addProjectViewModel.setProject(
                                     new Project(
                                             txt_NameProject.getText().toString(),
                                             new IP(txt_startIP.getText().toString()),
                                             Integer.parseInt(startMask.getText().toString())
                                     )
+                            );*/
+                            /*New Project*/
+                            currentProject = new Project(
+                                    txt_NameProject.getText().toString(),
+                                    new IP(txt_startIP.getText().toString()),
+                                    Integer.parseInt(startMask.getText().toString())
                             );
+                            adapterSubRedesProject.setItems(currentProject.getListNodos());
                         }
-                        project =  addProjectViewModel.getProject().getValue();
-                        ArrayList<SubRed> subReds = project.addSubRed(
+                        /*project =  addProjectViewModel.getProject().getValue();*/
+                        ArrayList<SubRed> subReds = currentProject.addSubRed(
                                 Integer.parseInt(String.valueOf(txt_numGroupNodes.getText())),
                                 descriptionGroup.getText().toString()
                         );
@@ -173,6 +182,18 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
 
                     } catch (Exception e) {
                         e.printStackTrace();
+                        if(e.getCause().toString().contains("Nodes Amount exceeded")){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setMessage("Nodes amount exceeded, add a tiny subred or remove some subreds.")
+                                    .setNeutralButton("Ok",new  DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                }
+                            });
+                            builder.create().show();
+
+
+                        }
                     }
                 }
             }
@@ -211,7 +232,7 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
         if (count == 0) {
             actionMode.finish();
         } else {
-            actionMode.setTitle(String.valueOf(count) + " Project (s) ");
+            actionMode.setTitle(String.valueOf(count) + " Subred (s) ");
             actionMode.invalidate();
         }
     }
@@ -258,6 +279,7 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
     private class ActionModeCallback implements ActionMode.Callback {
         @SuppressWarnings("unused")
         private final String TAG = AddProjectScreenFragment.ActionModeCallback.class.getSimpleName();
+        private AddProjectViewModel addProjectViewModel;
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -276,6 +298,8 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
                 case R.id.menu_remove:
                     // TODO: actually remove items
                     adapterSubRedesProject.removeItems(adapterSubRedesProject.getSelectedItems());
+                    currentProject.recalculateNodesRange();
+                    adapterSubRedesProject.notifyDataSetChanged();
                     mode.finish();
                     Log.d(TAG, "menu_remove");
                     mode.finish();

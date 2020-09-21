@@ -24,20 +24,25 @@ public class ProjectListAdapter extends SelectableAdapter<ProjectListAdapter.Pro
     @SuppressWarnings("unused")
     private static final String TAG = ProjectListAdapter.class.getSimpleName();
 
-    private static final int ITEM_COUNT = 25;
+    private static final int ITEM_COUNT = 2;
     private ArrayList<Project> items;
 
     ProjectViewHolder.ClickListener clickListener;
 
     public ProjectListAdapter(ProjectViewHolder.ClickListener clickListener) {
+
+        this(clickListener,new ArrayList<Project>());
+    }
+
+    public ProjectListAdapter(ProjectViewHolder.ClickListener clickListener,ArrayList<Project> items) {
         super();
         this.clickListener = clickListener;
 
         // Create some items
-        items = new ArrayList<>();
-        for (int i = 0; i < ITEM_COUNT; ++i) {
+        this.items = items;
+       /* for (int i = 0; i < ITEM_COUNT; ++i) {
             items.add(new Project("vic Project",new IP("192.168.168.12"),24));
-        }
+        }*/
     }
 
     @NonNull

@@ -68,7 +68,7 @@ public class SubRedListAdapter extends SelectableAdapter<SubRedListAdapter.SubRe
     public void onBindViewHolder(@NonNull SubRedViewHolder holder, int position) {
         SubRed subRedItem = items.get(position);
 
-        holder.txt_sum_nodos_subred.setText(subRedItem.getNodesAmount() + " nodes");
+        holder.txt_sum_nodos_subred.setText( subRedItem.getSubredSize()+" for " + subRedItem.getNodesAmount() + " nodes");
         holder.txt_subredDescription.setText(subRedItem.getSubredDescriptcion());
 
         String text ="Start IP: " + subRedItem.getSubredStartIP().toString();

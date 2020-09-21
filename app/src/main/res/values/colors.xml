@@ -9,6 +9,13 @@
     <color name="colorAccentEnabled">#1a73e8</color>
     <color name="colorAccentDisabled">#3B4E67</color>
 
+    <color name="button_ok_active">#00BC00</color>
+    <color name="button_ok_enabled">#00AA00</color>
+
+    <color name="button_cancel_active">#BC0000</color>
+    <color name="button_cancel_enabled">#AA0000</color>
+
+
     <color name="X">#FFAAAA</color>
     <color name="Z">#8BC34A</color>
     <color name="lyrics_primary">#3A3A3A</color>

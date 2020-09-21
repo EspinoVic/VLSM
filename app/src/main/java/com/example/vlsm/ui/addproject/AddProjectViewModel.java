@@ -16,20 +16,17 @@ public class AddProjectViewModel  extends ViewModel {
     private MutableLiveData<ArrayList<SubRed>> projectNodeList;
 */
 
-    public AddProjectViewModel() {
-        project = new MutableLiveData<Project>();
-        /*projectNodeList = new MutableLiveData<ArrayList<SubRed>>();
-        projectNodeList.setValue(new ArrayList<SubRed>());*/
-    }
 
-    public LiveData<Project> getProject() {
-
+    public MutableLiveData<Project> getProject() {
+        if(project==null){
+            project = new MutableLiveData<>();
+        }
         return project;
     }
 
-    public void setProject(Project project) {
+/*    public void setProject(Project project) {
         this.project.setValue(project);
-    }
+    }*/
 
     /*
     public LiveData<ArrayList<SubRed>> getProjectNodes(){

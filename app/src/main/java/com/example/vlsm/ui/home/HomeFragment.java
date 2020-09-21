@@ -26,6 +26,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.example.vlsm.R;
 import com.example.vlsm.binding.ProjectListAdapter;
 import com.example.vlsm.binding.SubRedListAdapter;
+import com.example.vlsm.data.model.Project;
+import com.example.vlsm.ui.addproject.AddProjectViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class HomeFragment extends Fragment implements ProjectListAdapter.ProjectViewHolder.ClickListener {
@@ -35,6 +37,7 @@ public class HomeFragment extends Fragment implements ProjectListAdapter.Project
     private ProjectListAdapter projectListAdapter;
     private ActionModeCallback actionModeCallback = new ActionModeCallback();
     private ActionMode actionMode;
+    private AddProjectViewModel addProjectViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -64,9 +67,23 @@ public class HomeFragment extends Fragment implements ProjectListAdapter.Project
                 textView.setText(s);
             }
         });*/
-
+        this.addProjectViewModel = new ViewModelProvider(requireActivity()).get(AddProjectViewModel.class);
+        this.addProjectViewModel.getProject().observe(getViewLifecycleOwner(), new Observer<Project>() {
+            @Override
+            public void onChanged(Project project) {
+                if(project!=null)
+                    projectListAdapter.addItem(project);
+            }
+        });
         return root;
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
     @Override
     public void onItemClicked(int position) {
         if (actionMode != null) {

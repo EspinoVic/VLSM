@@ -49,11 +49,18 @@ public class Project {
         this.totalPossibleNodes =  ( (int) Math.pow(2,32-mask) ) /*-2*/;
 
         this.currentNodesCount = 0;
-        for(SubRed subRed : listNodos){
-            this.currentNodesCount += subRed.getNodesAmount();
+        this.currentNodesCount = getCurrentNodesCount(this.listNodos);
 
-        }
     }
+
+    private static int getCurrentNodesCount(ArrayList<SubRed> listNodos){
+        int currentNodesCount = 0;
+        for(SubRed subRed : listNodos){
+            currentNodesCount += subRed.getSubredSize();
+        }
+        return  currentNodesCount;
+    }
+
 
     public static int calculateDefaultMask(IP ip){
         String[] octetos = ip.getIp().split("\\.");
@@ -81,17 +88,37 @@ public class Project {
 
         return -1;/*TODO change*/
     }
+    public void recalculateNodesRange() {
+        ArrayList<SubRed> aux = new ArrayList<>();
+        for(SubRed subRed:listNodos){
+            try {
+                aux.add(new SubRed(subRed.getNodesAmount(),subRed.getSubredDescriptcion()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        listNodos.clear();
+        for(SubRed subRed:aux){
+            try {
+                this.addSubRed(subRed.getNodesAmount(),subRed.getSubredDescriptcion());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
+    }
     public ArrayList<SubRed> addSubRed(int numNodes, String description) throws Exception {
 
-        if(numNodes+currentNodesCount >totalPossibleNodes){
+        this.currentNodesCount = getCurrentNodesCount(listNodos);
+        SubRed tempSubred =new  SubRed(numNodes,description);
+        if(tempSubred.getSubredSize()+currentNodesCount >totalPossibleNodes){
             throw new Exception("The nodes count exceeded the possible nodes amount," +
-                    "change the current mask or remove some subreds.");
+                    "change the current mask or remove some subreds.",new Throwable("Nodes Amount exceeded"));
             /*return null;*/
         }else{
 
             ArrayList<SubRed> tempListNodosToCalculateSizesAndOrder = new ArrayList<>();
-            tempListNodosToCalculateSizesAndOrder.add(new SubRed(numNodes,description));
+            tempListNodosToCalculateSizesAndOrder.add(tempSubred);
             int sizeListt =  this.listNodos.size();
 
             Collections.sort(tempListNodosToCalculateSizesAndOrder, new Comparator<SubRed>() {
@@ -155,4 +182,6 @@ public class Project {
     public int getCurrentNodesCount() {
         return currentNodesCount;
     }
+
+
 }

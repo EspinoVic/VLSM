@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vlsm.R;
+import com.example.vlsm.calculate.IP;
 import com.example.vlsm.data.model.Project;
 import com.example.vlsm.data.model.SubRed;
 
@@ -35,7 +36,7 @@ public class ProjectListAdapter extends SelectableAdapter<ProjectListAdapter.Pro
         // Create some items
         items = new ArrayList<>();
         for (int i = 0; i < ITEM_COUNT; ++i) {
-            items.add(new Project("vic Project","192.168.1651.12"));
+            items.add(new Project("vic Project",new IP("192.168.168.12"),24));
         }
     }
 

@@ -20,6 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
+        android:inputType="text"
         />
     <LinearLayout
         android:id="@+id/container_IP_MASK"
@@ -39,7 +40,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Start IP"
-            android:inputType="numberDecimal"
+            android:inputType="text"
             android:textColor="@color/lyrics_primary"
             android:textSize="24sp"
             android:layout_weight="6"
@@ -70,7 +71,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:gravity="center"
+        android:gravity="start"
         >
         <EditText
             android:id="@+id/txt_numGroupNodes"
@@ -94,6 +95,7 @@
 
             />
         <Button
+            android:id="@+id/btn_addSubRed"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.5"
@@ -112,7 +114,7 @@
         app:layout_constraintTop_toBottomOf="@id/container_project_info"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/project_subred_item"
-        tools:itemCount="1"
+        tools:itemCount="2"
 
         />
 

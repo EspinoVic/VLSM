@@ -2,9 +2,13 @@ package com.example.vlsm.ui.addproject;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,12 +21,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.vlsm.R;
 import com.example.vlsm.alb.Adapter;
 import com.example.vlsm.binding.ProjectListAdapter;
 import com.example.vlsm.binding.SubRedListAdapter;
+import com.example.vlsm.calculate.IP;
+import com.example.vlsm.data.model.Project;
+import com.example.vlsm.data.model.SubRed;
 import com.example.vlsm.ui.home.HomeFragment;
+import com.example.vlsm.ui.home.HomeViewModel;
+
+import java.util.ArrayList;
 
 import static android.widget.LinearLayout.HORIZONTAL;
 
@@ -33,67 +45,143 @@ import static android.widget.LinearLayout.HORIZONTAL;
  */
 public class AddProjectScreenFragment extends Fragment implements SubRedListAdapter.SubRedViewHolder.ClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private AddProjectViewModel addProjectViewModel;
     private SubRedListAdapter adapterSubRedesProject;
     private ActionModeCallback actionModeCallback = new AddProjectScreenFragment.ActionModeCallback();
     private ActionMode actionMode;
+
+
 
     public AddProjectScreenFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddProjectScreenFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static AddProjectScreenFragment newInstance(String param1, String param2) {
         AddProjectScreenFragment fragment = new AddProjectScreenFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
 
     }
-
+    private EditText txt_NameProject ;
+    private EditText txt_startIP ;
+    private EditText startMask ;
+    private EditText txt_numGroupNodes ;
+    private EditText descriptionGroup ;
+    private Button btn_addSubRed ;
+    private RecyclerView recyclerView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View root =  inflater.inflate(R.layout.fragment_add_project_screen, container, false);
 
-        RecyclerView recyclerView =  root.findViewById(R.id.recycler_subredlist_fromProject);
+        /*addProjectViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);*/
+        addProjectViewModel = new ViewModelProvider(this).get(AddProjectViewModel.class);
+
+         this.txt_NameProject = root.findViewById(R.id.txt_NameProject);
+         this.txt_startIP = root.findViewById(R.id.txt_startIP);
+         this.startMask = root.findViewById(R.id.startMask);
+         this.txt_numGroupNodes = root.findViewById(R.id.txt_numGroupNodes);
+         this.descriptionGroup = root.findViewById(R.id.descriptionGroup);
+         this.btn_addSubRed = root.findViewById(R.id.btn_addSubRed);
+
+        recyclerView =  root.findViewById(R.id.recycler_subredlist_fromProject);
         /*recyclerView.setAdapter(new Adapter(null));*/
         this.adapterSubRedesProject = new SubRedListAdapter(this);
         recyclerView.setAdapter(adapterSubRedesProject);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
- /*       DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), HORIZONTAL);
-        recyclerView.addItemDecoration(itemDecor);*/
+
+        /*
+        Before calling this fragment, the view model is changed
+        null when new project
+        not null when project exists
+        */
+        addProjectViewModel.getProject().observe(getViewLifecycleOwner(), new Observer<Project>() {
+            @Override
+            public void onChanged(Project project) {
+                if(project!=null){
+                    txt_NameProject.setText(project.getProjectName());
+                    txt_startIP.setText(project.getIpProject().toString());
+                    startMask.setText(project.getMask()+"");
+
+                    adapterSubRedesProject.setItems(project.getListNodos());
+                }
+
+            }
+        });
+
+       /*AA addProjectViewModel.getProjectNodes().observe(getViewLifecycleOwner(), new Observer<ArrayList<SubRed>>() {
+            @Override
+            public void onChanged(ArrayList<SubRed> subReds) {
+                if(subReds!=null){
+                    adapterSubRedesProject.setItems(subReds);
+                }else{
+                    adapterSubRedesProject.setItems(new ArrayList<SubRed>());*//*empty*//*
+
+                }
+            }
+        });*/
+
+        /**/
+/*        addProjectViewModel.getCurrentNodeToAdd().observe(getViewLifecycleOwner(), new Observer<SubRed>() {
+            @Override
+            public void onChanged(SubRed subRed) {
+                *//*It'll be null only the first time, when the viewModel is created*//*
+                if(subRed == null){
+                    return;
+                }else{
+                    adapterSubRedesProject.addItem(subRed);
+                }
+            }
+        });*/
+
+        btn_addSubRed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(validateNewNode()){
+
+                    try {
+                        Project project = addProjectViewModel.getProject().getValue();
+                        if(project == null){
+                            addProjectViewModel.setProject(
+                                    new Project(
+                                            txt_NameProject.getText().toString(),
+                                            new IP(txt_startIP.getText().toString()),
+                                            Integer.parseInt(startMask.getText().toString())
+                                    )
+                            );
+                        }
+                        project =  addProjectViewModel.getProject().getValue();
+                        ArrayList<SubRed> subReds = project.addSubRed(
+                                Integer.parseInt(String.valueOf(txt_numGroupNodes.getText())),
+                                descriptionGroup.getText().toString()
+                        );
+
+                        adapterSubRedesProject.notifyDataSetChanged();
+
+                       /* addProjectViewModel.setProjectNodeList(null);
+                        addProjectViewModel.setProjectNodeList(subReds);*/
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
         return  root;
     }
+
+
 
     @Override
     public void onItemClicked(int position) {
@@ -126,6 +214,44 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
             actionMode.setTitle(String.valueOf(count) + " Project (s) ");
             actionMode.invalidate();
         }
+    }
+
+
+    boolean validateNewNode(){
+
+        if(txt_NameProject.getText().toString().equals("")){
+            txt_NameProject.setError("Field required.");
+        }
+        if(txt_startIP.getText().toString().equals("")){
+
+            txt_startIP.setError("Insert a IP.");
+        }
+        IP startIP;
+        try{
+             startIP = new IP(txt_startIP.getText().toString());
+        }catch (Exception exce){
+            txt_startIP.setError("Insert a valid IP.");
+            return false;
+        }
+
+        if(startMask.getText().toString().isEmpty()){
+            startMask.setText(Project.calculateDefaultMask(startIP)+"");
+        }
+
+
+        int numNodes = 0;
+        try{
+            numNodes = Integer.parseInt(String.valueOf(this.txt_numGroupNodes.getText()));
+
+        }catch (Exception ex){
+            this.txt_numGroupNodes.setError("Only integer numbers");
+            return false;
+        }
+        if(String.valueOf(descriptionGroup.getText()).length()<4){
+            this.descriptionGroup.setError("Description name length should be more than 4 chars");
+            return false;
+        }
+        return true;
     }
 
 

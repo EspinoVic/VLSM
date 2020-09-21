@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vlsm.R;
+import com.example.vlsm.calculate.IP;
 import com.example.vlsm.data.model.SubRed;
 
 import java.util.ArrayList;
@@ -21,18 +22,39 @@ public class SubRedListAdapter extends SelectableAdapter<SubRedListAdapter.SubRe
     @SuppressWarnings("unused")
     private static final String TAG = SubRedListAdapter.class.getSimpleName();
 
-    private static final int ITEM_COUNT = 25;
     private ArrayList<SubRed> items;
     SubRedViewHolder.ClickListener clickListener;
 
     public SubRedListAdapter(SubRedViewHolder.ClickListener clickListener) {
+        this(clickListener,new ArrayList<SubRed>());
+
+    }
+    public SubRedListAdapter(SubRedViewHolder.ClickListener clickListener,ArrayList<SubRed> items) {
         super();
         this.clickListener = clickListener;
         // Create some items
-        items = new ArrayList<>();
-        for (int i = 0; i < ITEM_COUNT; ++i) {
-            items.add(new SubRed(2,"Vic DEsc" + i,"start ip","end ip","1111"));
-        }
+        this.items = items;
+        /*for (int i = 0; i < ITEM_COUNT; ++i) {
+            try {
+                items.add(new SubRed(2,"Vic DEsc" + i,new IP("192.168.1.0")));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }*/
+       /* try {
+            items.add(new SubRed(70,"Vic DEsc" + 70,new IP("192.168.2.0")));
+            items.add(new SubRed(20,"Vic DEsc" + 20,new IP("192.168.2.0")));
+            items.add(new SubRed(10,"Vic DEsc" + 10,new IP("192.168.2.0")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+
+    }
+
+    public void setItems(ArrayList<SubRed> items){
+        this.items = items;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -48,9 +70,15 @@ public class SubRedListAdapter extends SelectableAdapter<SubRedListAdapter.SubRe
 
         holder.txt_sum_nodos_subred.setText(subRedItem.getNodesAmount() + " nodes");
         holder.txt_subredDescription.setText(subRedItem.getSubredDescriptcion());
-        holder.txt_subredStartIP.setText(subRedItem.getSubredStartIP());
-        holder.txt_subredFinaltIP.setText(subRedItem.getSubredEndIP());
-        holder.txtSubredMaskInfo.setText(subRedItem.getSubredStartMask());
+
+        String text ="Start IP: " + subRedItem.getSubredStartIP().toString();
+        holder.txt_subredStartIP.setText(text);
+
+        text ="End IP: " +subRedItem.getSubredEndIP().toString();
+        holder.txt_subredFinaltIP.setText(text);
+
+        text ="Mask: " +subRedItem.getSubredMask();
+        holder.txtSubredMaskInfo.setText(text);
 
         holder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
 
@@ -67,6 +95,18 @@ public class SubRedListAdapter extends SelectableAdapter<SubRedListAdapter.SubRe
         notifyItemInserted(0);
 
     }
+    public void addItem(SubRed item,int indexInsertion){
+        items.add( indexInsertion,item);
+        //notifyItemInserted(items.size()-1);
+        notifyItemInserted(indexInsertion);
+    }
+    public void addItem(SubRed item,boolean end){
+        int indexInsert = end?items.size():0;
+        items.add( indexInsert,item);
+        notifyItemInserted(indexInsert);
+
+    }
+
  /*   @Override
     public int getItemViewType(int position) {
         return super.getItemViewType(position);

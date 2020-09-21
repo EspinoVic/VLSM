@@ -1,59 +1,72 @@
 package com.example.vlsm.data.model;
 
+import com.example.vlsm.calculate.IP;
+
 public class SubRed {
 
     private int nodesAmount;
     private String subredDescriptcion;
+    private int subredSize;/*Nodes Amount Possible*/
 
-    private String subredStartIP;
-    private String subredEndIP;
-    private String subredStartMask;
+    private IP subredStartIP;
+    private IP subredEndIP;
+    private int subredMask;
 
-    public SubRed(int nodesAmount, String subredDescriptcion, String subredStartIP, String subredEndIP, String subredStartMask) {
+    public SubRed(int nodesAmount, String subredDescriptcion,IP startIP) throws Exception {
         this.nodesAmount = nodesAmount;
         this.subredDescriptcion = subredDescriptcion;
-        this.subredStartIP = subredStartIP;
-        this.subredEndIP = subredEndIP;
-        this.subredStartMask = subredStartMask;
+        for(int i = 2;i<=8;i++){
+            int potencia = (int) Math.pow(2,i);
+            if(potencia>= (nodesAmount+2)){
+                this.subredSize = potencia;
+                this.subredMask = 32-i;
+                break;
+            }
+        }
+        this.subredStartIP = startIP.clone();
+        this.subredEndIP = startIP.plusNodes(subredSize-1);
+        if(subredEndIP == null){
+            throw new Exception("Subred exceeded 255.255.255.255");
+
+        }
+    }
+
+    /*For temporal list, that will set the order*/
+    public SubRed(int nodesAmount, String subredDescriptcion) throws Exception {
+        this.nodesAmount = nodesAmount;
+        this.subredDescriptcion = subredDescriptcion;
+        for(int i = 2;i<=8;i++){
+            int potencia = (int) Math.pow(2,i);
+            if(potencia>= (nodesAmount+2)){
+                this.subredSize = potencia;
+                this.subredMask = 32-i;
+                break;
+            }
+        }
+
     }
 
     public int getNodesAmount() {
         return nodesAmount;
     }
 
-    public void setNodesAmount(int nodesAmount) {
-        this.nodesAmount = nodesAmount;
-    }
-
     public String getSubredDescriptcion() {
         return subredDescriptcion;
     }
 
-    public void setSubredDescriptcion(String subredDescriptcion) {
-        this.subredDescriptcion = subredDescriptcion;
+    public int getSubredSize() {
+        return subredSize;
     }
 
-    public String getSubredStartIP() {
+    public IP getSubredStartIP() {
         return subredStartIP;
     }
 
-    public void setSubredStartIP(String subredStartIP) {
-        this.subredStartIP = subredStartIP;
-    }
-
-    public String getSubredEndIP() {
+    public IP getSubredEndIP() {
         return subredEndIP;
     }
 
-    public void setSubredEndIP(String subredEndIP) {
-        this.subredEndIP = subredEndIP;
-    }
-
-    public String getSubredStartMask() {
-        return subredStartMask;
-    }
-
-    public void setSubredStartMask(String subredStartMask) {
-        this.subredStartMask = subredStartMask;
+    public int getSubredMask() {
+        return subredMask;
     }
 }

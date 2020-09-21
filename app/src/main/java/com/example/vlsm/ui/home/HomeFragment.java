@@ -39,9 +39,17 @@ public class HomeFragment extends Fragment implements ProjectListAdapter.Project
     private ActionMode actionMode;
     private AddProjectViewModel addProjectViewModel;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        projectListAdapter = new ProjectListAdapter(this);
+        this.addProjectViewModel = new ViewModelProvider(requireActivity()).get(AddProjectViewModel.class);
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         FloatingActionButton fabAdd = root.findViewById(R.id.fab_addProject);
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +64,6 @@ public class HomeFragment extends Fragment implements ProjectListAdapter.Project
 
         RecyclerView recyclerView =  root.findViewById(R.id.recycler_projec_list);
         /*recyclerView.setAdapter(new Adapter(null));*/
-        projectListAdapter = new ProjectListAdapter(this);
 
         recyclerView.setAdapter(projectListAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -67,12 +74,14 @@ public class HomeFragment extends Fragment implements ProjectListAdapter.Project
                 textView.setText(s);
             }
         });*/
-        this.addProjectViewModel = new ViewModelProvider(requireActivity()).get(AddProjectViewModel.class);
+
         this.addProjectViewModel.getProject().observe(getViewLifecycleOwner(), new Observer<Project>() {
             @Override
             public void onChanged(Project project) {
-                if(project!=null)
+                if(project!=null){
                     projectListAdapter.addItem(project);
+                    addProjectViewModel.getProject().setValue(null);/*Clean the shared element*/
+                }
             }
         });
         return root;

@@ -56,7 +56,7 @@ public class ProjectListAdapter extends SelectableAdapter<ProjectListAdapter.Pro
     public void onBindViewHolder(@NonNull ProjectViewHolder holder, int position) {
         Project projectItem = items.get(position);
 
-        holder.txt_project_name.setText(projectItem.getProjectName() + " nodes");
+        holder.txt_project_name.setText(projectItem.getProjectName());
         holder.txt_date_project_creation.setText(projectItem.getDateTimeCreation());
 
         holder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
@@ -77,10 +77,20 @@ public class ProjectListAdapter extends SelectableAdapter<ProjectListAdapter.Pro
         notifyItemInserted(0);
 
     }
- /*   @Override
-    public int getItemViewType(int position) {
-        return super.getItemViewType(position);
-    }*/
+
+    public void setItems(ArrayList<Project> projects){
+        this.items = projects;
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<Project> getItems() {
+        return items;
+    }
+
+    /*   @Override
+        public int getItemViewType(int position) {
+            return super.getItemViewType(position);
+        }*/
     public void removeItem(int position) {
      items.remove(position);
      notifyItemRemoved(position);

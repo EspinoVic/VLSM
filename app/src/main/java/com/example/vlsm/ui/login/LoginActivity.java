@@ -305,7 +305,7 @@ public class LoginActivity extends AppCompatActivity {
         setResult(Activity.RESULT_OK);
 
         Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-        myIntent.putExtra("usename", username); //Optional parameters
+        myIntent.putExtra("username", username); //Optional parameters
         LoginActivity.this.startActivity(myIntent);
 
         finish();

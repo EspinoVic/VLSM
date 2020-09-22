@@ -41,7 +41,10 @@ public class Project {
     public Project(String projectName, IP ipProject, int mask) {
         this(projectName,ipProject,mask,new ArrayList<SubRed>());
     }
-
+    public Project(String projectName, IP ipProject, int mask,String dateTimeCreation) {
+        this(projectName,ipProject,mask,new ArrayList<SubRed>());
+        this.dateTimeCreation = dateTimeCreation;
+    }
     public Project(String projectName, IP ipProject, int mask, ArrayList<SubRed> listNodos) {
         this.projectName = projectName;
         this.ipProject = IP.calculateStartIP( ipProject,mask);

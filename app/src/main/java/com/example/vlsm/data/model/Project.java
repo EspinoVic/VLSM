@@ -119,22 +119,29 @@ public class Project {
 
             ArrayList<SubRed> tempListNodosToCalculateSizesAndOrder = new ArrayList<>();
             tempListNodosToCalculateSizesAndOrder.add(tempSubred);
+            tempListNodosToCalculateSizesAndOrder.addAll(this.listNodos);
             int sizeListt =  this.listNodos.size();
+            this.listNodos.clear();
 
             Collections.sort(tempListNodosToCalculateSizesAndOrder, new Comparator<SubRed>() {
                 @Override
                 public int compare(SubRed subRed1, SubRed subRed2) {
-                    return subRed2.getSubredSize()-subRed1.getSubredSize();
+                    int beforeAfter = subRed2.getSubredSize()-subRed1.getSubredSize();
+                    if(beforeAfter == 0){/*Same subred size, so will check the amount of nodes given by the user*/
+                        beforeAfter = subRed2.getNodesAmount()-subRed1.getNodesAmount();
+                    }
+                    return beforeAfter;
                 }
             });
 
+            recalculateNodesRange();
             for(SubRed subRedTemp : tempListNodosToCalculateSizesAndOrder){
                 final SubRed subRedToInsert = new SubRed(
                         subRedTemp.getNodesAmount(),
                         subRedTemp.getSubredDescriptcion(),
                                 /*empty list, then the "next" node start inn the ip project,
                                 no emprt, then the next node start at the end of the last node*/
-                        sizeListt == 0 ?
+                        this.listNodos.size() == 0 ?
                                 this.ipProject
                                 /*: subRedTemp.getSubredEndIP()*/
                                 : this.listNodos.get(this.listNodos.size()-1).getSubredEndIP().plusNodes(1)

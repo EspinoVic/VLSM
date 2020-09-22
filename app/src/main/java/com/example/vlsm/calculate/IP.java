@@ -19,7 +19,10 @@ public class IP {
         this.octetos = ip.clone();
         this.ip = "";
         for(int i = 0;i<4;i++){
-             this.ip += octetos[i]+".";
+             this.ip += octetos[i]+"";
+             if(i<3){
+                 this.ip+=".";
+             }
         }
     }
     public static IP calculateStartIP(IP ip,int mask){

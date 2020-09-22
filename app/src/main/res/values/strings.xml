@@ -32,5 +32,6 @@
     <string name="start_ip">Start IP: a.b.c.d</string>
     <string name="end_ip">End IP: a.b.c.d</string>
     <string name="delete_selection">Delete selection</string>
+    <string name="prompt_user">User</string>
 
 </resources>

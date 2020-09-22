@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "301364988808",
+    "firebase_url": "https://vlsm-vic.firebaseio.com",
+    "project_id": "vlsm-vic",
+    "storage_bucket": "vlsm-vic.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:301364988808:android:a814c6f9f1d8a7d81e883d",
+        "android_client_info": {
+          "package_name": "com.example.vlsm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "301364988808-7bhs0k65ffuhl3a847ghijktutaokenv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vlsm",
+            "certificate_hash": "9b9e46ff8fc0f7fd0d3747328ab9bf936012dd30"
+          }
+        },
+        {
+          "client_id": "301364988808-3sf7ldlkqm13h4n4sodhbao657j81561.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwXMtck3w_pnvnrFH2D4Evu9fE7fjjSCg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "301364988808-3sf7ldlkqm13h4n4sodhbao657j81561.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

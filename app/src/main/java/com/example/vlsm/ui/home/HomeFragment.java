@@ -38,6 +38,7 @@ public class HomeFragment extends Fragment implements ProjectListAdapter.Project
     private ActionModeCallback actionModeCallback = new ActionModeCallback();
     private ActionMode actionMode;
     private AddProjectViewModel addProjectViewModel;
+    private int editing = -1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,12 +47,12 @@ public class HomeFragment extends Fragment implements ProjectListAdapter.Project
         projectListAdapter = new ProjectListAdapter(this);
         this.addProjectViewModel = new ViewModelProvider(requireActivity()).get(AddProjectViewModel.class);
     }
-
+    FloatingActionButton fabAdd;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        FloatingActionButton fabAdd = root.findViewById(R.id.fab_addProject);
+        fabAdd = root.findViewById(R.id.fab_addProject);
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,8 +80,17 @@ public class HomeFragment extends Fragment implements ProjectListAdapter.Project
             @Override
             public void onChanged(Project project) {
                 if(project!=null){
-                    projectListAdapter.addItem(project);
-                    addProjectViewModel.getProject().setValue(null);/*Clean the shared element*/
+                    if(project.CURRENT_STATE == Project.STATE_EDIT_FINISH){/*existing modified*/
+                        projectListAdapter.notifyItemChanged(editing);
+                    }else
+                    if(project.CURRENT_STATE == Project.STATE_EDITING){/*existing modified*/
+                        /*ignore here*/
+                    }else
+                    {/*new created*/
+                        projectListAdapter.addItem(project);
+                        addProjectViewModel.getProject().setValue(null);/*Clean the shared element*/
+                    }
+
                 }
             }
         });
@@ -96,6 +106,11 @@ public class HomeFragment extends Fragment implements ProjectListAdapter.Project
     public void onItemClicked(int position) {
         if (actionMode != null) {
             toggleSelection(position);
+        }else{
+            Project projectToEdit = projectListAdapter.getItem(position);
+            projectToEdit.CURRENT_STATE = Project.STATE_EDITING;
+            addProjectViewModel.getProject().setValue(projectToEdit);
+            Navigation.findNavController(fabAdd).navigate(R.id.action_nav_home_to_addProjectScreenFragment);
         }
     }
 

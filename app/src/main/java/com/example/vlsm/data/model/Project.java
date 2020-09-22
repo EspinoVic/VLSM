@@ -25,6 +25,14 @@ public class Project {
     private int totalPossibleNodes;
     private int currentNodesCount;
 
+    public static final int STATE_CREATING = -1;
+    public static final int STATE_CREATE_FINISH = -2;
+
+    public static final int STATE_EDITING = -3;
+    public static final int STATE_EDIT_FINISH= -4;
+
+    public int CURRENT_STATE = -1;/*CREATING by default*/
+
     public Project(String projectName, IP ip) {
         this(projectName,ip, calculateDefaultMask(ip));
         /*If there's no mask it's needed to calculate the default mask by checking the IP begining 192,172... */

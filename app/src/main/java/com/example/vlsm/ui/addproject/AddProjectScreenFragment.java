@@ -142,6 +142,11 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
             public void onClick(View view) {
                 addProjectViewModel.getProject().setValue(currentProject);
                 getActivity().onBackPressed();
+                if(currentProject.CURRENT_STATE==Project.STATE_EDITING){
+                    currentProject.CURRENT_STATE= Project.STATE_EDIT_FINISH;/*If it was being edited, then the edit will finish*/
+                }else if(currentProject.CURRENT_STATE==Project.STATE_CREATING){
+                    currentProject.CURRENT_STATE= Project.STATE_CREATE_FINISH;/*If it was being created, then the creation'll finish*/
+                }
             }
         });
 

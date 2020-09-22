@@ -13,7 +13,57 @@ public class IP {
         for(int i = 0;i<4;i++){
             octetos[i] = Integer.parseInt(split[i]);
         }
+    }
 
+    public IP(int[] ip){
+        this.octetos = ip.clone();
+        this.ip = "";
+        for(int i = 0;i<4;i++){
+             this.ip += octetos[i]+".";
+        }
+    }
+    public static IP calculateStartIP(IP ip,int mask){
+
+        String maskStr = "";
+        for(int i = 0;i<35;i++){
+
+            if(i==8||i==17||i==26){
+                maskStr = maskStr.concat(".");
+                continue;
+            }
+            if(mask>23){
+                maskStr = maskStr.concat( (i<mask+3?1:0)+"");
+            }else
+            if(mask>15){
+                maskStr = maskStr.concat( (i<mask+2?1:0)+"");
+            }else
+            if(mask>7){
+                maskStr = maskStr.concat( (i<mask+1?1:0)+"");
+            }else
+            if(mask<=7){
+                maskStr = maskStr.concat( (i<mask?1:0)+"");
+            }
+
+        }
+        String[] maskBinSplit = maskStr.split("\\.");
+
+       /* int[] maskSplit = new int[4];*/
+        int[] octetosIP = ip.getOctetos();
+
+        int[] ipMasked = new int[4];
+
+        for(int i = 0;i<4;i++){
+            ipMasked[i] = octetosIP[i] & Integer.parseInt(maskBinSplit[i],2);
+        }
+
+        return  new IP(ipMasked);
+
+
+
+    }
+
+    public int[] getOctetos() {
+        return octetos;
     }
 
     public String getIp() {

@@ -36,7 +36,7 @@ public class Project {
 
     public Project(String projectName, IP ipProject, int mask, ArrayList<SubRed> listNodos) {
         this.projectName = projectName;
-        this.ipProject = ipProject;
+        this.ipProject = IP.calculateStartIP( ipProject,mask);
         this.mask = mask;
         this.listNodos = listNodos;
 /*

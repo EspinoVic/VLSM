@@ -257,7 +257,11 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
 
         if(startMask.getText().toString().isEmpty()){
             startMask.setText(Project.calculateDefaultMask(startIP)+"");
-        }
+        }else
+            if(Integer.parseInt(startMask.getText().toString())>32){
+                startMask.setError("Subred Mask should to be between 0 and 32");
+                return  false;
+            }
 
 
         int numNodes = 0;

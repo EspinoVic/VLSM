@@ -69,4 +69,12 @@ public class SubRed {
     public int getSubredMask() {
         return subredMask;
     }
+
+    public void setNodesAmount(int nodesAmount) {
+        this.nodesAmount = nodesAmount;
+    }
+
+    public void setSubredDescriptcion(String subredDescriptcion) {
+        this.subredDescriptcion = subredDescriptcion;
+    }
 }

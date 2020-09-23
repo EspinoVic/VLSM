@@ -178,7 +178,5 @@
             app:layout_constraintStart_toStartOf="@id/gl_Cancel"
             />
 
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

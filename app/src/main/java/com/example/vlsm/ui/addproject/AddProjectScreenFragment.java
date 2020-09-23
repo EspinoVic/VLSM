@@ -210,9 +210,46 @@ public class AddProjectScreenFragment extends Fragment implements SubRedListAdap
 
 
     @Override
-    public void onItemClicked(int position) {
+    public void onItemClicked(final int position) {
         if (actionMode != null) {
             toggleSelection(position);
+        }else{
+            /*Editing*/
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            View dialogEdit = LayoutInflater.from(getContext()).inflate(R.layout.dialog_edit_subred, null);
+            final EditText txtEditAmount = dialogEdit.findViewById(R.id.txt_edit_node_amount);
+            EditText txtEditDescription = dialogEdit.findViewById(R.id.txt_edit_description);
+
+            Button buttonOk = dialogEdit.findViewById(R.id.button_ok);
+            Button buttonCancel = dialogEdit.findViewById(R.id.button_cancel);
+
+            builder.setView(dialogEdit);
+
+            final AlertDialog alertDialog = builder.create();
+
+            buttonOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    currentProject.getListNodos().get(position).setNodesAmount(Integer.parseInt(txtEditAmount.getText().toString()));
+                    currentProject.getListNodos().get(position).setSubredDescriptcion(txtEditAmount.getText().toString());
+                    currentProject.recalculateNodesRange();
+
+                    adapterSubRedesProject.notifyDataSetChanged();
+
+                    alertDialog.dismiss();
+                }
+            });
+
+            buttonCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    alertDialog.dismiss();
+                }
+            });
+
+            alertDialog.show();
+
         }
     }
 

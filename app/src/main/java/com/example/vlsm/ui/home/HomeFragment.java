@@ -290,6 +290,7 @@ public class HomeFragment extends Fragment implements ProjectListAdapter.Project
                 case R.id.menu_remove:
                     // TODO: actually remove items
                     projectListAdapter.removeItems(projectListAdapter.getSelectedItems());
+                    saveProjectsChange();
                     mode.finish();
                     Log.d(TAG, "menu_remove");
                     mode.finish();

@@ -99,21 +99,21 @@ public class IP {
             cociente = cloneOctetos[3]/255;
             residuo = cloneOctetos[3]%255;
 
-            cloneOctetos[3] = residuo;
+            cloneOctetos[3] = residuo-1;
             cloneOctetos[2]+= cociente;
 
             if(cloneOctetos[2]>255){
                 cociente = cloneOctetos[2]/255;
                 residuo = cloneOctetos[2]%255;
 
-                cloneOctetos[2] = residuo;
+                cloneOctetos[2] = residuo-1;
                 cloneOctetos[1]+= cociente;
 
                 if(cloneOctetos[1]>255){
                     cociente = cloneOctetos[1]/255;
                     residuo = cloneOctetos[1]%255;
 
-                    cloneOctetos[1] = residuo;
+                    cloneOctetos[1] = residuo-1;
                     cloneOctetos[0]+= cociente;
 
 
